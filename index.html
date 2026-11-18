@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Customer Stratification Dashboard · ARS Interactive Mockup</title>
+<title>Customer Stratification Dashboard · Interactive Mockup</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -85,7 +85,7 @@ select:focus,button:focus-visible{outline:2px solid #2253B4;outline-offset:1px}
 </head>
 <body>
 <div id="stage"><div id="scaler"><div id="board"></div></div></div>
-<p class="foot">Interactive mockup with sample data · Texas A&amp;M Industrial Distribution Capstone, Group 4 · Prepared for American Refrigeration Supplies</p>
+<p class="foot">Interactive mockup · all values are sample data</p>
 <script>
 (function () {
 'use strict';
@@ -392,9 +392,9 @@ var monthOpts = UM.map(function (m, i) { return [i, fmy(m)]; });
 function headerHtml(pg) {
   var tab = function (id, href, label) { return '<a href="#' + href + '"' + (pg === id ? ' class="on" aria-current="page"' : '') + '>' + label + '</a>'; };
   return '<header><div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="#23408B" stroke-width="2.6" stroke-linecap="round"/></svg></div>' +
-    '<div class="brand"><b>Customer Stratification Dashboard</b><span>American Refrigeration Supplies · Power BI report mockup</span></div>' +
+    '<div class="brand"><b>Customer Stratification Dashboard</b><span>Power BI report mockup</span></div>' +
     '<nav class="tabs" aria-label="Report pages">' + tab('impl', 'implementation', '1 · Implementation') + tab('imp', 'impact', '2 · Impact') + tab('ref', 'refresh', '3 · Refresh and reevaluation') + '</nav>' +
-    '<span class="hmeta">Sample data, as of Oct 20, 2027<br>Texas A&amp;M IDIS Capstone, Group 4</span></header>';
+    '<span class="hmeta">Sample data<br>As of Oct 20, 2027</span></header>';
 }
 
 function viewImpl(s) {
