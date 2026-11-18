@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Stratification Dashboard · ARS Interactive Mockup</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#DCE0E6;font-family:Arial,Helvetica,sans-serif;color:#2E3440}
+#stage{display:flex;justify-content:center;overflow:hidden;padding-top:20px}
+#scaler{flex:none;width:1280px;transform-origin:top center}
+#board{width:1280px;height:720px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#EEF0F3;border-radius:6px;box-shadow:0 8px 28px rgba(20,30,60,.20)}
+.foot{margin:10px auto 24px;text-align:center;font-size:12px;color:#5F6878}
+button{font-family:Arial,Helvetica,sans-serif}
+header{height:52px;flex:none;padding:0 16px;display:flex;align-items:center;gap:18px;background:#23408B;color:#fff}
+.logo{width:30px;height:30px;border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.brand{display:flex;flex-direction:column;gap:1px}
+.brand b{font-size:15px}.brand span{font-size:11px;color:#D6E0F5}
+nav.tabs{display:flex;align-self:stretch;gap:2px;margin-left:8px}
+nav.tabs a{display:flex;align-items:center;padding:3px 14px 0;border-bottom:3px solid #23408B;font-size:13px;font-weight:700;color:#C9D6F2;text-decoration:none}
+nav.tabs a.on{border-bottom-color:#DA1F27;color:#fff}
+nav.tabs a:hover{color:#fff}
+.hmeta{margin-left:auto;font-size:11px;line-height:1.4;color:#D6E0F5;text-align:right}
+main{flex:1;min-height:0;padding:14px 16px;display:flex;flex-direction:column}
+.card{background:#fff;border:1px solid #D5DAE2;border-radius:8px}
+.fbar{flex:none;height:62px;padding:8px 14px;display:flex;align-items:flex-end;gap:14px}
+.fld{display:flex;flex-direction:column;gap:3px}
+.fld>span{font-size:11px;font-weight:700;color:#6B6B6B}
+select{height:36px;padding:0 30px 0 10px;border:1px solid #C9CFD9;border-radius:6px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2323408B' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 10px center;font:13px Arial,Helvetica,sans-serif;color:#2E3440;-webkit-appearance:none;appearance:none;cursor:pointer}
+select:focus,button:focus-visible{outline:2px solid #2253B4;outline-offset:1px}
+.btn{height:36px;padding:0 12px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid #C9CFD9;background:#fff;color:#23408B}
+.btn.on{background:#23408B;border-color:#23408B;color:#fff}
+.scope{margin:0 0 10px auto;font-size:12px;color:#6B6B6B;white-space:nowrap}
+.grid{flex:none;height:566px;margin-top:12px;display:grid;grid-template-columns:300px minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) 206px;gap:12px}
+.panel{min-height:0;overflow:hidden;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.h2{margin:0;font-size:14px;color:#23408B}
+.sub{font-size:11px;color:#6B6B6B}
+.lbl{font-size:11px;font-weight:700;color:#2253B4}
+.headline{margin:0;font-size:17px;line-height:1.3;color:#23408B}
+.pill{display:inline-block;padding:3px 0;border-radius:999px;text-align:center;font-size:11px;font-weight:700;white-space:nowrap}
+.kpi{display:flex;align-items:center;gap:8px;width:100%;padding:0 10px;border-radius:6px;cursor:pointer;text-align:left;border:1px solid #fff;background:#fff}
+.kpi:hover{border-color:#C9D6F2}
+.kpi.on{border-color:#2253B4;background:#DCE6F7}
+.kt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.kt b{font-size:13px;color:#23408B}
+.kt small{font-size:11px;line-height:1.25;color:#6B6B6B}
+.kv{min-width:40px;text-align:right;font-size:17px;font-weight:700;color:#2E3440}
+.def{padding:8px 12px;border-radius:6px;background:#F4F6F9;display:flex;flex-direction:column;gap:2px;font-size:12px;line-height:1.4}
+.crumb{height:26px;padding:0 9px;border:none;border-radius:4px;background:#EEF0F3;font-size:11px;font-weight:700;color:#23408B;cursor:pointer;white-space:nowrap}
+.bar{display:grid;grid-template-columns:104px minmax(0,1fr) 40px;align-items:center;gap:8px;width:100%;height:26px;padding:0 4px;border:none;border-radius:4px;background:#fff;text-align:left}
+.bar:hover{background:#F4F6F9}
+.bar .bl{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .bt{position:relative;display:block;height:18px;border-radius:3px;background:#EEF0F3}
+.bar .bf{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.bar .tk{position:absolute;top:-3px;bottom:-3px;width:2px;background:#2E3440}
+.bar .bv{font-size:12px;font-weight:700;text-align:right}
+.note{margin:4px 0 0;padding:10px 12px;border-radius:6px;background:#F4F6F9;font-size:12px;line-height:1.45}
+.legend{display:flex;gap:14px;font-size:11px;color:#6B6B6B}
+.legend span{display:flex;align-items:center;gap:5px}
+.tiles{flex:none;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.tile{padding:8px 14px;display:flex;flex-direction:column;gap:3px;height:56px}
+.tile span{font-size:10.5px;font-weight:700;color:#6B6B6B;white-space:nowrap}
+.tile b{font-size:17px;color:#23408B;display:flex;align-items:center;gap:8px}
+.cal{flex:none;margin-top:10px;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.cycles{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.cyc{padding:7px 10px;border-radius:7px;border:1px solid #D5DAE2;background:#fff;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.cyc:hover{border-color:#9DB4E3}
+.cyc.on{border:2px solid #2253B4;background:#DCE6F7;padding:6px 9px}
+.cyc b{font-size:13px;color:#23408B}.cyc small{font-size:11px;color:#2E3440}
+.cyc em{font-style:normal;font-size:11px;color:#6B6B6B;display:flex;align-items:center;gap:6px}
+.cols{flex:1;min-height:0;margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px}
+.row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #EEF0F3}
+.row:last-child{border-bottom:none}
+.num{width:22px;height:22px;border-radius:50%;background:#DCE6F7;color:#23408B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.rnum{width:22px;height:22px;border-radius:4px;border:1px solid #9DB4E3;color:#23408B;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.rt b{font-size:12px}.rt small{font-size:11px;color:#6B6B6B}
+.summary{padding:8px 12px;border-radius:6px;background:#EEF3FB;font-size:12px;font-weight:700;color:#23408B;line-height:1.4}
+.fu{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid #EEF0F3}
+.fu .rt b{font-size:12px}
+.fr{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none}
+.fr small{font-size:11px;color:#6B6B6B}
+</style>
+</head>
+<body>
+<div id="stage"><div id="scaler"><div id="board"></div></div></div>
+<p class="foot">Interactive mockup with sample data · Texas A&amp;M Industrial Distribution Capstone, Group 4 · Prepared for American Refrigeration Supplies</p>
+<script>
+(function () {
+'use strict';
+// ---------- helpers ----------
+var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var DN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function pad2(n) { return String(n).padStart(2, '0'); }
+function pad3(n) { return String(n).padStart(3, '0'); }
+function hstr(s) { var h = 2166136261 >>> 0; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h; }
+function rnd(k) { var t = (hstr(k) + 0x6D2B79F5) >>> 0; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+function unit(k) { return rnd(k) * 2 - 1; }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function lerp(a, b, p) { return a + (b - a) * p; }
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function dt(iso) { return new Date(Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10))); }
+function isoOf(d) { return d.toISOString().slice(0, 10); }
+function fd(iso) { if (!iso) return '—'; var d = dt(iso); return MN[d.getUTCMonth()] + ' ' + d.getUTCDate(); }
+function fdy(iso) { var d = dt(iso); return MN[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear(); }
+function fdw(iso) { return DN[dt(iso).getUTCDay()] + ', ' + fdy(iso); }
+function fmy(iso) { var d = dt(iso); return MN[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+function daysBetween(a, b) { return Math.round((dt(b) - dt(a)) / 864e5); }
+function addDays(iso, n) { var d = dt(iso); d.setUTCDate(d.getUTCDate() + n); while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() + 1); return isoOf(d); }
+function pct0(v) { return v === null || v === undefined ? '—' : Math.round(v * 100) + '%'; }
+function pct1(v) { return v === null || v === undefined ? '—' : (v * 100).toFixed(1) + '%'; }
+function money(v, dec) { if (v === null) return '—'; var s = Math.abs(v).toFixed(dec || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); return (v < 0 ? '−$' : '$') + s; }
+function big(v) { if (v === null) return '—'; var sg = v < 0 ? '−$' : '$', x = Math.abs(v); if (x >= 1e6) return sg + (x / 1e6).toFixed(2) + 'M'; if (x >= 1e3) return sg + (x / 1e3).toFixed(0) + 'K'; return sg + Math.round(x); }
+function num(v) { return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function pill(st) {
+  var good = { bg: '#DFF3E4', fg: '#1B6E33', ac: '#2E9E4F' }, warn = { bg: '#FFF1C2', fg: '#7A5600', ac: '#F2C200' };
+  var bad = { bg: '#FBE3E4', fg: '#B3161D', ac: '#DA1F27' }, neut = { bg: '#EDEDED', fg: '#555555', ac: '#9DB4E3' };
+  var m = { 'On track': good, 'Done': good, 'Complete': good, 'Watch': warn, 'Done late': warn, 'In progress': warn, 'Open': warn, 'Off track': bad, 'Overdue': bad };
+  var c = m[st] || neut; return { text: st, bg: c.bg, fg: c.fg, ac: c.ac };
+}
+function pillHtml(p, w) { return '<span class="pill" style="' + (w ? 'width:' + w + 'px;' : 'padding:3px 10px;') + 'background:' + p.bg + ';color:' + p.fg + '">' + esc(p.text) + '</span>'; }
+function opt(v, label, cur) { return '<option value="' + esc(v) + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + esc(label) + '</option>'; }
+function sel(action, label, width, options, cur) {
+  return '<label class="fld" style="width:' + width + 'px"><span>' + label + '</span><select data-a="' + action + '" style="width:100%">' +
+    options.map(function (o) { return opt(o[0], o[1], cur); }).join('') + '</select></label>';
+}
+
+// ---------- branches and people ----------
+var REGIONS = ['West', 'Central', 'Mountain', 'South'];
+var BR = [];
+for (var i = 1; i <= 33; i++) BR.push({ id: 'B' + pad2(i), num: i, n: 'Branch ' + pad2(i), g: i <= 9 ? 'West' : i <= 18 ? 'Central' : i <= 25 ? 'Mountain' : 'South' });
+var BRM = {}; BR.forEach(function (b) { BRM[b.id] = b; });
+var USERS = [], rc = 0;
+BR.forEach(function (b) {
+  USERS.push({ id: 'M' + b.num, n: 'Manager ' + pad2(b.num), r: 'M', b: b.id });
+  var k = b.num === 9 ? 2 : (b.num <= 18 ? 3 : 3 + (rnd('reps' + b.num) < 0.5 ? 0 : 1));
+  for (var j = 0; j < k; j++) { rc++; USERS.push({ id: 'R' + rc, n: 'Rep ' + pad3(rc), r: 'R', b: b.id }); }
+});
+var UBY = {}; USERS.forEach(function (u) { (UBY[u.b] = UBY[u.b] || []).push(u); });
+function nR(b) { return UBY[b].filter(function (u) { return u.r === 'R'; }).length; }
+function wOf(b, role) { return role === 'all' ? UBY[b].length : (role === 'M' ? 1 : nR(b)); }
+function scopeBranches(region, branch) { return BR.filter(function (b) { return (region === 'all' || b.g === region) && (branch === 'all' || b.id === branch); }); }
+
+// ---------- implementation model ----------
+var UM = ['2027-04-01', '2027-05-01', '2027-06-01', '2027-07-01', '2027-08-01', '2027-09-01'];
+var IMPL = [
+  { key: 'Adoption', label: 'Usage', t: 0.80, kind: 'user', trend: [0.52, 0.68, 0.79, 0.85, 0.89, 0.91],
+    q: 'Are trained reps and managers using Pro Sales?', d: 'Share of trained users who worked their flagged accounts in Pro Sales in most weeks of the month.', h: 'of trained {who} used Pro Sales in most weeks' },
+  { key: 'Fidelity', label: 'Follow-through', t: 0.70, kind: 'user', trend: [0.41, 0.55, 0.63, 0.70, 0.75, 0.78],
+    q: 'Are the recommended tier actions getting done?', d: 'Share of tier actions due this month (calls, visits, reviews) marked complete in Pro Sales.', h: 'of tier actions due were completed by {who}' },
+  { key: 'Penetration', label: 'Branch reach', t: 0.90, kind: 'branch', trend: [1, 1, 1, 1, 1, 1],
+    q: 'How many branches have the tool in regular use?', d: 'Share of branches where at least 70% of trained users are active.', h: 'of branches have Pro Sales in regular use' },
+  { key: 'Sustainability', label: 'Sustained use', t: 0.80, kind: 'user', trend: [null, null, 0.82, 0.85, 0.88, 0.91],
+    q: 'Is usage holding after the first months?', d: 'Usage among people at least three months past their go-live date.', h: 'of {who} past three months are still active' },
+  { key: 'Acceptability', label: 'Buy-in', t: 0.80, kind: 'survey', trend: [null, 0.58, 0.58, 0.76, 0.76, 0.76],
+    q: 'Do people think the model is worth using?', d: 'Share of survey responses rating “The model helps me prioritize my time” 4 or 5 (latest wave).', h: 'of {who} say the model is worth using' },
+  { key: 'Appropriateness', label: 'Tier fit', t: 0.75, kind: 'survey', trend: [null, 0.47, 0.47, 0.72, 0.72, 0.72],
+    q: 'Do the tiers match what people see in their accounts?', d: 'Share of survey responses rating “The tiers fit my accounts” 4 or 5 (latest wave).', h: 'of {who} say the tiers fit their accounts' },
+  { key: 'Feasibility', label: 'Data quality', t: 0.95, kind: 'user', trend: [0.90, 0.92, 0.94, 0.95, 0.96, 0.97],
+    q: 'Is the customer data complete enough to score?', d: 'Share of active customer records with every scoring input present.', h: 'of customer records have complete scoring data' },
+  { key: 'Implementation cost', label: 'Rollout cost', t: 0.90, kind: 'cost', trend: [1, 1, 1, 1, 1, 1],
+    q: 'Is the rollout staying within its time budget?', d: 'Share of branches whose training and setup hours stayed within budget.', h: 'of branches stayed within the rollout hours budget' }
+];
+var IMK = {}; IMPL.forEach(function (k) { IMK[k.key] = k; });
+var PIN = { Appropriateness: { minMi: 3, vals: { B10: 0.67, B11: 1, B12: 0.33, B13: 0.50, B14: 0.60, B15: 1, B16: 0.75, B17: 0.67, B18: 1 } } };
+var ROLEOFF = { Adoption: 0.05, Fidelity: 0.06, Sustainability: 0.04, Acceptability: 0.08, Appropriateness: 0.05, Feasibility: 0.01 };
+var FIX = {}; BR.forEach(function (b) { FIX[b.id] = rnd('fix' + b.id) < 0.22 ? 1 + Math.floor(rnd('fixm' + b.id) * 4) : 0; });
+var memo = {};
+function baseBranch(K, mi) {
+  var key = K.key + '|' + mi; if (memo[key]) return memo[key];
+  var base = K.trend[mi], out = {};
+  if (base === null) { BR.forEach(function (b) { out[b.id] = null; }); return (memo[key] = out); }
+  var amp = Math.min(0.12, (1 - base) * 0.9);
+  var pin = PIN[K.key] && mi >= PIN[K.key].minMi ? PIN[K.key].vals : null;
+  var W = 0, S = 0, Wf = 0;
+  BR.forEach(function (b) {
+    var w = UBY[b.id].length; W += w;
+    if (pin && pin[b.id] !== undefined) out[b.id] = pin[b.id];
+    else { out[b.id] = base + amp * (0.45 * unit(K.key + '|reg|' + b.g) + 0.55 * unit(K.key + '|br|' + b.id)); Wf += w; }
+    S += w * out[b.id];
+  });
+  var corr = (base * W - S) / Wf;
+  BR.forEach(function (b) { if (!(pin && pin[b.id] !== undefined)) out[b.id] = clamp(out[b.id] + corr, 0, 1); });
+  return (memo[key] = out);
+}
+function branchVal(K, b, mi, role) {
+  var v = baseBranch(K, mi)[b.id]; if (v === null) return null;
+  if (role === 'all') return v;
+  var x = ROLEOFF[K.key] || 0; return clamp(role === 'M' ? v + x : v - x / nR(b.id), 0, 1);
+}
+function implValue(K, brs, role, mi) {
+  if (!brs.length) return null;
+  if (K.kind === 'cost') return brs.filter(function (b) { return mi >= FIX[b.id]; }).length / brs.length;
+  if (K.kind === 'branch') {
+    var m = 0, p = 0;
+    brs.forEach(function (b) { var a = branchVal(IMK.Adoption, b, mi, role); if (a !== null) { m++; if (a >= 0.70) p++; } });
+    return m ? p / m : null;
+  }
+  var W = 0, S = 0;
+  brs.forEach(function (b) { var v = branchVal(K, b, mi, role); if (v === null) return; var w = wOf(b.id, role); W += w; S += w * v; });
+  return W ? S / W : null;
+}
+function personVal(K, u, mi) {
+  var v = baseBranch(K, mi)[u.b]; if (v === null) return null;
+  var x = ROLEOFF[K.key] || 0, rv = u.r === 'M' ? v + x : v - x / nR(u.b);
+  return clamp(rv + 0.16 * unit(K.key + '|u|' + u.id), 0, 1);
+}
+function implStatus(v, t) { if (v === null) return 'No data yet'; if (v >= t - 1e-9) return 'On track'; if (v >= t - 0.10) return 'Watch'; return 'Off track'; }
+function gaugeArc(v) { var a = Math.PI * (1 - clamp(v, 0, 1)); return 'M 40 150 A 110 110 0 0 1 ' + (150 + 110 * Math.cos(a)).toFixed(1) + ' ' + (150 - 110 * Math.sin(a)).toFixed(1); }
+function gaugeTick(t) { var a = Math.PI * (1 - t); return { x1: (150 + 92 * Math.cos(a)).toFixed(1), y1: (150 - 92 * Math.sin(a)).toFixed(1), x2: (150 + 132 * Math.cos(a)).toFixed(1), y2: (150 - 132 * Math.sin(a)).toFixed(1), lx: (150 + 146 * Math.cos(a)).toFixed(1), ly: (150 - 146 * Math.sin(a) + 4).toFixed(1) }; }
+
+// ---------- impact model ----------
+var CMON = []; for (var t0 = 0; t0 < 21; t0++) CMON.push((2026 + Math.floor(t0 / 12)) + '-' + pad2(t0 % 12 + 1) + '-01');
+var SEAS = [0.70, 0.72, 0.85, 0.95, 1.08, 1.18, 1.22, 1.18, 1.00, 0.92, 0.80, 0.75];
+var TIERS = ['Core', 'Opportunistic', 'Service Drain', 'Marginal'];
+var TYPES = ['Residential HVAC', 'Commercial HVAC', 'Refrigeration'], TYW = [0.55, 0.30, 0.15], TYR = [1, 1.4, 1.2];
+var SIZES = ['Small (<$10K)', 'Medium ($10–40K)', 'Large ($40–100K)', 'Key (≥$100K)'], SZR = [1, 3, 8, 20], SZI = [2, 5, 10, 22];
+var PROFS = ['Profitable', 'Break-even', 'Unprofitable'];
+var PSZ = { 'Core': [0.10, 0.30, 0.35, 0.25], 'Opportunistic': [0.35, 0.40, 0.20, 0.05], 'Service Drain': [0.20, 0.35, 0.30, 0.15], 'Marginal': [0.60, 0.30, 0.08, 0.02] };
+var PT = { 'Profitable': [0.30, 0.38, 0.111, 0.209], 'Break-even': [0.10, 0.20, 0.28, 0.42], 'Unprofitable': [0.05, 0.10, 0.35, 0.50] };
+var RG = { West: [1679, 0.691, 0.645], Central: [1567, 0.705, 0.660], Mountain: [1007, 0.705, 0.643], South: [1344, 0.694, 0.647] };
+var TF = { 'Core': [2.2, 0.27, 0.075, 1.08], 'Opportunistic': [1.0, 0.30, 0.09, 1.14], 'Service Drain': [1.6, 0.22, 0.21, 1.06], 'Marginal': [0.45, 0.24, 0.16, 1.07] };
+var SF = { 'Profitable': [1.03, 0.85], 'Break-even': [0.97, 1.25], 'Unprofitable': [0.92, 1.6] };
+var PU = 0.13;
+var TOT = { revTY: 13.51e6, revLY: 12.34e6, gmTY: 0.260, gmLY: 0.2579, ctsTY: 0.115, ctsLY: 0.133, cpiTY: 53.55, cpiLY: 55.96, nTY: 5339, nLY: 5369 };
+var SEG = [];
+REGIONS.forEach(function (r) {
+  var C = RG[r][0], p = RG[r][1], ly = RG[r][2], pb = 1 - p - PU, bR = (ly - p * 0.85 - PU * 0.08) / pb;
+  PROFS.forEach(function (s, si) {
+    var ps = si === 0 ? p : si === 1 ? pb : PU;
+    TIERS.forEach(function (t, ti) {
+      TYPES.forEach(function (y, yi) {
+        SIZES.forEach(function (z, zi) {
+          var c = C * ps * PT[s][ti] * TYW[yi] * PSZ[t][zi], key = [r, t, y, z, s].join('|'), tf = TF[t], sf = SF[s];
+          var rTY = c * tf[0] * SZR[zi] * TYR[yi] * (1 + 0.05 * unit('rg' + r)) * (1 + 0.10 * unit(key));
+          var rLY = rTY / (tf[3] * (1 + 0.03 * unit(key + 'g')));
+          SEG.push({ p: [r, t, y, z, s], c: c, rTY: rTY, rLY: rLY, gTY: rTY * tf[1] * sf[0], gLY: rLY * (tf[1] * sf[0] - 0.002),
+            kTY: rTY * tf[2] * sf[1], kLY: rLY * tf[2] * sf[1] * 1.12, iTY: c * SZI[zi] * (1 + 0.1 * unit(key + 'i')),
+            coreTY: t === 'Core' ? 1 : 0, drTY: t === 'Service Drain' ? 1 : 0, pfTY: si === 0 ? 1 : 0, pfLY: si === 0 ? 0.85 : si === 1 ? bR : 0.08 });
+        });
+      });
+    });
+  });
+});
+function scaleTo(f, target) { var s = 0; SEG.forEach(function (e) { s += e[f]; }); var k = target / s; SEG.forEach(function (e) { e[f] *= k; }); }
+scaleTo('rTY', TOT.revTY); scaleTo('rLY', TOT.revLY);
+scaleTo('gTY', TOT.gmTY * TOT.revTY); scaleTo('gLY', TOT.gmLY * TOT.revLY);
+scaleTo('kTY', TOT.ctsTY * TOT.revTY); scaleTo('kLY', TOT.ctsLY * TOT.revLY);
+SEG.forEach(function (e) { e.iLY = e.iTY * 0.99; });
+scaleTo('iTY', TOT.ctsTY * TOT.revTY / TOT.cpiTY); scaleTo('iLY', TOT.ctsLY * TOT.revLY / TOT.cpiLY);
+var CT = 0, coreC = 0, drC = 0; SEG.forEach(function (e) { CT += e.c; coreC += e.c * e.coreTY; drC += e.c * e.drTY; });
+var arTY = TOT.nTY / CT, arLY = TOT.nLY / CT, csTY = coreC / CT, dsTY = drC / CT;
+var bCore = (0.228 - 0.92 * csTY) / (1 - csTY), bDr = (0.176 - 0.90 * dsTY) / (1 - dsTY);
+SEG.forEach(function (e) { e.coreLY = e.coreTY ? 0.92 : bCore; e.drLY = e.drTY ? 0.90 : bDr; });
+function prog(t) { return t <= 15 ? 0 : Math.min(1, (t - 15) / 5); }
+var WIG = [0, -0.003, -0.001, -0.002, 0.002, 0.003, 0.004, 0.005];
+SEG.forEach(function (e) {
+  e.m = [];
+  for (var t = 0; t < 21; t++) {
+    var ly = t < 12, P = prog(t), sea = SEAS[t % 12] / SEAS[8];
+    var rev = (ly ? e.rLY : e.rTY) * sea;
+    var gr = lerp(e.gLY / e.rLY, e.gTY / e.rTY, P), kr = lerp(e.kLY / e.rLY, e.kTY / e.rTY, P);
+    var inv = (ly ? e.iLY : lerp(e.iLY, e.iTY, P)) * sea, n = e.c * (ly ? arLY : arTY);
+    var pd = 0, pn = 0;
+    if (t >= 8) { var w = t <= 15 ? WIG[t - 8] : 0; pd = e.c; pn = e.c * clamp(lerp(e.pfLY, e.pfTY, P) + w * (1 - P), 0, 1); }
+    e.m.push([n, rev, rev * gr, rev * kr, inv, n * lerp(e.coreLY, e.coreTY, P), n * lerp(e.drLY, e.drTY, P), pd, pn]);
+  }
+});
+var IMPACT = [
+  { key: 'prof', label: 'Profitable customers', better: 'H', unit: 'pts', t: 3.0, fmt: 'pct', def: 'Share of selected customers whose trailing-12-month net contribution margin is at least 3%', head: 'of the {n} selected customers are profitable after cost to serve' },
+  { key: 'ncm', label: 'Net margin', better: 'H', unit: 'pts', t: 1.0, fmt: 'pct', def: 'Gross profit minus cost to serve, as a share of revenue', head: 'net contribution margin across {n} active customers' },
+  { key: 'acts', label: 'Avg cost to serve', better: 'L', unit: 'pct', t: -0.03, fmt: '$', def: 'Cost to serve divided by the number of active customers in the month', head: 'average cost to serve per active customer' },
+  { key: 'ctsp', label: 'Cost to serve %', better: 'L', unit: 'pts', t: -1.0, fmt: 'pct', def: 'Cost to serve as a share of revenue', head: 'of revenue goes to cost to serve' },
+  { key: 'cpi', label: 'Cost per invoice', better: 'L', unit: 'pct', t: -0.03, fmt: '$2', def: 'Cost to serve divided by the number of invoices in the month', head: 'cost to serve per invoice' },
+  { key: 'gm', label: 'Gross margin', better: 'H', unit: 'pts', t: 0.5, fmt: 'pct', def: 'Gross profit as a share of revenue', head: 'gross margin on sales to the selected customers' },
+  { key: 'rev', label: 'Revenue', better: 'H', unit: 'pct', t: 0.05, fmt: 'big', def: 'Invoiced sales in the month', head: 'revenue from {n} active customers' },
+  { key: 'nc', label: 'Net contribution', better: 'H', unit: 'pct', t: 0.10, fmt: 'big', def: 'Gross profit minus cost to serve, in dollars', head: 'net contribution after cost to serve' },
+  { key: 'core', label: 'Core share', better: 'H', unit: 'pts', t: 1.0, fmt: 'pct', def: 'Share of active customers in the Core tier', head: 'of active customers are in the Core tier' },
+  { key: 'drain', label: 'Service Drain share', better: 'L', unit: 'pts', t: -1.0, fmt: 'pct', def: 'Share of active customers in the Service Drain tier', head: 'of active customers are in the Service Drain tier' }
+];
+function impFilter(s, o) {
+  o = o || {};
+  var f = { r: o.r || s.pRegion, t: o.t || s.pTier, y: s.pType, z: s.pSize, p: s.pProf };
+  return SEG.filter(function (e) { return (f.r === 'all' || e.p[0] === f.r) && (f.t === 'all' || e.p[1] === f.t) && (f.y === 'all' || e.p[2] === f.y) && (f.z === 'all' || e.p[3] === f.z) && (f.p === 'all' || e.p[4] === f.p); });
+}
+function impAgg(es) {
+  var out = []; for (var t = 0; t < 21; t++) out.push([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  es.forEach(function (e) { for (var t = 0; t < 21; t++) { var a = e.m[t], o = out[t]; for (var j = 0; j < 9; j++) o[j] += a[j]; } });
+  return out;
+}
+function impValue(key, a) {
+  var n = a[0], rev = a[1], gp = a[2], cts = a[3], inv = a[4];
+  if (key === 'prof') return a[7] ? a[8] / a[7] : null;
+  if (!n || !rev) return null;
+  switch (key) {
+    case 'ncm': return (gp - cts) / rev; case 'acts': return cts / n; case 'ctsp': return cts / rev; case 'cpi': return inv ? cts / inv : null;
+    case 'gm': return gp / rev; case 'rev': return rev; case 'nc': return gp - cts; case 'core': return a[5] / n; case 'drain': return a[6] / n;
+  }
+  return null;
+}
+function impFmt(K, v) { if (v === null) return '—'; if (K.fmt === 'pct') return pct1(v); if (K.fmt === '$2') return money(v, 2); if (K.fmt === 'big') return big(v); return money(v, 0); }
+function impChange(K, v, ly) { if (v === null || ly === null || ly === 0) return null; return K.unit === 'pts' ? (v - ly) * 100 : (v - ly) / Math.abs(ly); }
+function impChangeText(K, c) { if (c === null) return 'No comparison yet'; var t = K.unit === 'pts' ? Math.abs(c).toFixed(1) + ' pts' : (Math.abs(c) * 100).toFixed(1) + '%'; return (c >= 0 ? 'Up ' : 'Down ') + t; }
+function impStatus(K, c) { if (c === null) return 'No comparison'; if (K.better === 'H') return c >= K.t ? 'On track' : (c >= 0 ? 'Watch' : 'Off track'); return c <= K.t ? 'On track' : (c <= 0 ? 'Watch' : 'Off track'); }
+
+// ---------- refresh model ----------
+var ASOF = '2027-10-20';
+var CYC = [['2027-Q2', '2027-04-01', 'Launch scoring', 'Launch'], ['2027-Q3', '2027-07-01', 'Quarterly refresh', 'Confirmed'], ['2027-Q4', '2027-10-01', 'Quarterly refresh', 'Confirmed'],
+  ['2028-Q1', '2028-01-03', 'Quarterly refresh', 'Estimated'], ['2028-Q2', '2028-04-03', 'Quarterly refresh', 'Estimated'], ['2028-Q3', '2028-07-03', 'Quarterly refresh', 'Estimated'], ['2028-Q4', '2028-10-02', 'Quarterly refresh', 'Estimated']]
+  .map(function (c) { var d = dt(c[1]); return { id: c[0], s: c[1], ty: c[2], ds: c[3], ws: isoOf(new Date(Date.UTC(d.getUTCFullYear() - 1, d.getUTCMonth(), 1))), we: isoOf(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - 1, 1))), p: addDays(c[1], 10), rd: addDays(c[1], 27) }; });
+var CYM = {}; CYC.forEach(function (c) { CYM[c.id] = c; });
+var STEPDEF = [[1, 'Pull 12-month ERP data', 'Central analytics', 0, 3], [2, 'Re-score every customer', 'Central analytics', 3, 5], [3, 'QA and sign-off', 'Chief of Staff team', 5, 7],
+  [4, 'Publish tiers in Pro Sales', 'Central analytics', 7, 10], [5, 'Issue branch review task', 'Pro Sales, automatic', 10, 10], [6, 'Branch review meetings', 'Branch managers', 10, 27],
+  [7, 'Send disputes and feedback', 'Branch managers', 20, 28], [8, 'Resolve disputes and close', 'Central analytics', 28, 35]];
+function stepsOf(c) {
+  return STEPDEF.map(function (d) {
+    var st = addDays(c.s, d[3]), en = addDays(c.s, d[4]), done = null;
+    if (en < ASOF) done = (c.id === '2027-Q3' && d[0] === 7) ? addDays(en, 1) : en;
+    return { no: d[0], name: d[1], owner: d[2], start: st, end: en, done: done };
+  });
+}
+function stepStatus(r) { if (r.done) return r.done <= r.end ? 'Done' : 'Done late'; if (ASOF > r.end) return 'Overdue'; if (ASOF >= r.start) return 'In progress'; return 'Upcoming'; }
+function cycleStatus(c) {
+  var st = stepsOf(c), done = st.filter(function (r) { return r.done; }).length;
+  if (done === st.length) return 'Complete'; if (c.s > ASOF) return 'Upcoming';
+  if (st.some(function (r) { return !r.done && r.end < ASOF; })) return 'Overdue'; return 'In progress';
+}
+var TASKDEF = [[1, 'Review the tier-change report', 'Branch manager', 10], [2, 'Assign customer follow-ups', 'Branch manager', 12], [3, 'Hold branch review meeting', 'Branch manager', 27],
+  [4, 'Send disputes and feedback', 'Branch manager', 28], [5, 'Log meeting notes', 'Branch manager', 28], [6, 'Reps finish follow-ups', 'Sales reps', 39]];
+function shuffled(key) { return BR.slice().sort(function (a, b) { return rnd(key + a.id) - rnd(key + b.id); }); }
+var TASKS = [];
+(function () {
+  var q3 = CYM['2027-Q3'];
+  TASKDEF.forEach(function (td) {
+    var due = addDays(q3.s, td[3]);
+    BR.forEach(function (b) { var late = rnd('q3late' + td[0] + b.id) < 0.06; TASKS.push({ c: q3.id, b: b.id, no: td[0], due: due, done: late ? addDays(due, 1 + Math.floor(rnd('q3d' + b.id + td[0]) * 3)) : addDays(due, -Math.floor(rnd('q3e' + b.id + td[0]) * 3)) }); });
+  });
+  var q4 = CYM['2027-Q4'], dueOf = function (no) { return addDays(q4.s, TASKDEF[no - 1][3]); };
+  var t3 = shuffled('t3').slice(0, 17).map(function (b) { return b.id; }), t5 = t3.slice(0, 15);
+  BR.forEach(function (b) {
+    var id = b.id;
+    TASKS.push({ c: q4.id, b: id, no: 1, due: dueOf(1), done: addDays('2027-10-08', Math.floor(rnd('t1' + id) * 3)) });
+    TASKS.push({ c: q4.id, b: id, no: 2, due: dueOf(2), done: (id === 'B12' || id === 'B27') ? null : addDays('2027-10-11', Math.floor(rnd('t2' + id) * 3)) });
+    TASKS.push({ c: q4.id, b: id, no: 3, due: dueOf(3), done: t3.indexOf(id) >= 0 ? addDays('2027-10-14', Math.floor(rnd('t3d' + id) * 5)) : null, note: t3.indexOf(id) >= 0 ? '' : '' });
+    TASKS.push({ c: q4.id, b: id, no: 4, due: dueOf(4), done: null });
+    TASKS.push({ c: q4.id, b: id, no: 5, due: dueOf(5), done: t5.indexOf(id) >= 0 ? addDays('2027-10-15', Math.floor(rnd('t5d' + id) * 4)) : null });
+    TASKS.push({ c: q4.id, b: id, no: 6, due: dueOf(6), done: null });
+  });
+})();
+function taskStatus(due, comp, issued) { if (comp) return comp <= due ? 'Done' : 'Done late'; if (ASOF < issued) return 'Not issued yet'; if (ASOF > due) return 'Overdue'; return 'Open'; }
+var ACT = { 'Opportunistic>Core': 'Growth review call within 2 weeks', 'Marginal>Opportunistic': 'Intro call to set up an account plan', 'Service Drain>Core': 'Confirm service plan within 2 weeks',
+  'Core>Opportunistic': 'Retention call within 2 weeks', 'Core>Service Drain': 'Service-cost meeting within 2 weeks', 'Opportunistic>Marginal': 'Check-in call to review buying', 'Service Drain>Marginal': 'Review terms and cost to serve' };
+function ownerIn(b, key) { var us = UBY[b]; return us[Math.floor(rnd(key) * us.length)]; }
+function genChanges(c, mix, doneN, disputes, pinned, late) {
+  var rows = [], used = {}; pinned.forEach(function (p) { used[p.cust] = 1; rows.push(p); });
+  var k = 0;
+  mix.forEach(function (m) {
+    for (var j = 0; j < m[2]; j++) {
+      k++; var key = c.id + 'ch' + k, cust;
+      do { cust = 10000 + Math.floor(rnd(key + 'c' + (cust || 0)) * 3000); key += 'x'; } while (used[cust]);
+      used[cust] = 1;
+      var b = BR[Math.floor(rnd(c.id + 'b' + k) * 33)].id, up = TIERS.indexOf(m[1]) === 0 || (m[0] === 'Marginal');
+      rows.push({ cust: cust, b: b, u: ownerIn(b, c.id + 'o' + k).id, from: m[0], to: m[1], dir: up ? 'Up' : 'Down', due: null, done: null, disp: false });
+    }
+  });
+  var rest = rows.slice(pinned.length).sort(function (a, b) { return rnd(c.id + 'ord' + a.cust) - rnd(c.id + 'ord' + b.cust); });
+  rest.forEach(function (r, i) {
+    r.due = r.dir === 'Down' ? addDays(c.p, 15 + Math.floor(rnd('dd' + r.cust) * 4)) : addDays(c.p, 21 + Math.floor(rnd('du' + r.cust) * 6));
+    if (i < doneN) r.done = (i < late) ? addDays(r.due, 1 + Math.floor(rnd('lt' + r.cust) * 3)) : addDays(c.p, 1 + Math.floor(rnd('dn' + r.cust) * 8));
+    if (i >= doneN - disputes && i < doneN || (disputes > doneN && i < disputes)) r.disp = true;
+  });
+  return rows;
+}
+var CHANGES = {};
+(function () {
+  var q4 = CYM['2027-Q4'], q3 = CYM['2027-Q3'];
+  var uid = function (name) { return USERS.filter(function (u) { return u.n === name; })[0]; };
+  var pin = [[10590, 'Rep 010', 'Core', 'Opportunistic'], [11357, 'Rep 023', 'Core', 'Opportunistic'], [11879, 'Manager 12', 'Core', 'Opportunistic'],
+    [11890, 'Rep 033', 'Core', 'Opportunistic'], [12243, 'Rep 039', 'Core', 'Opportunistic'], [12391, 'Manager 15', 'Core', 'Service Drain']]
+    .map(function (p) { var u = uid(p[1]); return { cust: p[0], b: u.b, u: u.id, from: p[2], to: p[3], dir: 'Down', due: addDays(q4.p, 14), done: null, disp: false }; });
+  CHANGES[q4.id] = genChanges(q4, [['Opportunistic', 'Core', 75], ['Marginal', 'Opportunistic', 60], ['Service Drain', 'Core', 25], ['Core', 'Opportunistic', 35], ['Core', 'Service Drain', 14], ['Opportunistic', 'Marginal', 25], ['Service Drain', 'Marginal', 10]], 71, 15, pin, 0);
+  CHANGES[q3.id] = genChanges(q3, [['Opportunistic', 'Core', 62], ['Marginal', 'Opportunistic', 50], ['Service Drain', 'Core', 20], ['Core', 'Opportunistic', 38], ['Core', 'Service Drain', 16], ['Opportunistic', 'Marginal', 20], ['Service Drain', 'Marginal', 8]], 214, 15, [], 9);
+})();
+
+// ---------- state ----------
+var S = { mi: 5, role: 'all', region: 'all', branch: 'all', implKpi: 'Adoption', impKpi: 'prof', pRegion: 'all', pTier: 'all', pType: 'all', pSize: 'all', pProf: 'all', impBy: 'region', cycle: null, rBranch: 'all' };
+function page() { var h = (location.hash || '').replace('#', ''); return h === 'impact' ? 'imp' : h === 'refresh' ? 'ref' : 'impl'; }
+var monthOpts = UM.map(function (m, i) { return [i, fmy(m)]; });
+
+// ---------- views ----------
+function headerHtml(pg) {
+  var tab = function (id, href, label) { return '<a href="#' + href + '"' + (pg === id ? ' class="on" aria-current="page"' : '') + '>' + label + '</a>'; };
+  return '<header><div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="#23408B" stroke-width="2.6" stroke-linecap="round"/></svg></div>' +
+    '<div class="brand"><b>Customer Stratification Dashboard</b><span>American Refrigeration Supplies · Power BI report mockup</span></div>' +
+    '<nav class="tabs" aria-label="Report pages">' + tab('impl', 'implementation', '1 · Implementation') + tab('imp', 'impact', '2 · Impact') + tab('ref', 'refresh', '3 · Refresh and reevaluation') + '</nav>' +
+    '<span class="hmeta">Sample data, as of Oct 20, 2027<br>Texas A&amp;M IDIS Capstone, Group 4</span></header>';
+}
+
+function viewImpl(s) {
+  var brs = scopeBranches(s.region, s.branch);
+  var users = USERS.filter(function (u) { return (s.role === 'all' || u.r === s.role) && brs.some(function (b) { return b.id === u.b; }); });
+  var who = s.role === 'M' ? 'branch managers' : s.role === 'R' ? 'sales reps' : 'reps and managers';
+  var roles = [['all', 'All'], ['R', 'Sales reps'], ['M', 'Branch managers']].map(function (r) { return '<button class="btn' + (s.role === r[0] ? ' on' : '') + '" aria-pressed="' + (s.role === r[0]) + '" data-a="role" data-v="' + r[0] + '">' + r[1] + '</button>'; }).join('');
+  var brOpts = [['all', 'All branches']].concat(BR.filter(function (b) { return s.region === 'all' || b.g === s.region; }).map(function (b) { return [b.id, b.n]; }));
+  var scope = (s.role === 'all' ? 'Reps and managers' : s.role === 'M' ? 'Branch managers' : 'Sales reps') + ' · ' + (s.branch !== 'all' ? BRM[s.branch].n : s.region !== 'all' ? s.region + ' region' : 'All 33 branches') + ' · ' + fmy(UM[s.mi]);
+  var fbar = '<div class="card fbar">' + sel('mi', 'Report month', 140, monthOpts, s.mi) +
+    '<div class="fld" role="group" aria-label="Role"><span>Role</span><div style="display:flex;gap:6px">' + roles + '</div></div>' +
+    sel('region', 'Region', 150, [['all', 'All regions']].concat(REGIONS.map(function (r) { return [r, r]; })), s.region) +
+    sel('branch', 'Branch', 150, brOpts, s.branch) + '<span class="scope">' + esc(scope) + '</span></div>';
+  var kpis = IMPL.map(function (K) {
+    var v = implValue(K, brs, s.role, s.mi), on = K.key === s.implKpi;
+    return '<button class="kpi' + (on ? ' on' : '') + '" style="height:55px" aria-current="' + on + '" data-a="implKpi" data-v="' + K.key + '"><span class="kt"><b>' + K.label + '</b><small>' + K.key + ' · target ' + pct0(K.t) + '</small></span><span class="kv">' + pct0(v) + '</span>' + pillHtml(pill(implStatus(v, K.t)), 68) + '</button>';
+  }).join('');
+  var K = IMK[s.implKpi], v = implValue(K, brs, s.role, s.mi), p = pill(implStatus(v, K.t)), tk = gaugeTick(K.t);
+  var headline = v === null ? 'No ' + K.label.toLowerCase() + ' data yet for this selection' : pct0(v) + ' ' + K.h.replace('{who}', who);
+  var gauge = '<svg viewBox="-10 0 320 178" role="img" aria-label="' + esc(headline) + '" style="display:block;width:100%;max-width:250px;margin:2px auto 0">' +
+    '<path d="M 40 150 A 110 110 0 0 1 260 150" fill="none" stroke="#E4E8EF" stroke-width="26"/>' + (v === null ? '' : '<path d="' + gaugeArc(v) + '" fill="none" stroke="' + p.ac + '" stroke-width="26"/>') +
+    '<line x1="' + tk.x1 + '" y1="' + tk.y1 + '" x2="' + tk.x2 + '" y2="' + tk.y2 + '" stroke="#2E3440" stroke-width="3"/>' +
+    '<text x="' + tk.lx + '" y="' + tk.ly + '" text-anchor="middle" font-size="13" font-weight="700" fill="#2E3440">' + pct0(K.t) + '</text>' +
+    '<text x="150" y="136" text-anchor="middle" font-size="48" font-weight="700" fill="#23408B">' + pct0(v) + '</text>' +
+    '<text x="40" y="172" text-anchor="middle" font-size="13" fill="#6B6B6B">0%</text><text x="260" y="172" text-anchor="middle" font-size="13" fill="#6B6B6B">100%</text></svg>';
+  var center = '<div class="card panel" style="padding:12px 16px"><span class="lbl">Selected KPI: ' + K.label + ' · ' + K.key + '</span><h2 class="headline">' + esc(headline) + '</h2>' + gauge +
+    '<div style="display:flex;align-items:center;justify-content:center;gap:10px">' + pillHtml(p) + '<span style="font-size:12px">Target ' + pct0(K.t) + ' (black tick)</span></div>' +
+    '<div class="def" style="margin-top:2px"><b>' + esc(K.q) + '</b><span>' + esc(K.d) + '</span></div></div>';
+  // drill-down
+  var level = s.region === 'all' ? 'region' : (s.branch === 'all' ? 'branch' : 'person'), note = '', groups = [];
+  if (level === 'person' && (K.kind === 'branch' || K.kind === 'cost')) note = 'This is a branch measure, so there is no per-person view. Go up a level to compare branches.';
+  if (level === 'person' && K.kind === 'survey') note = 'Survey answers are only reported for groups, so there is no per-person view.';
+  if (level === 'region') groups = REGIONS.map(function (g) { return { label: g, v: implValue(K, scopeBranches(g, 'all'), s.role, s.mi), a: 'drillRegion', val: g }; });
+  if (level === 'branch') groups = BR.filter(function (b) { return b.g === s.region; }).map(function (b) { return { label: b.n, v: implValue(K, [b], s.role, s.mi), a: 'drillBranch', val: b.id }; });
+  if (level === 'person' && !note) groups = users.map(function (u) { return { label: u.n + (u.r === 'M' ? ' (mgr)' : ''), v: personVal(K, u, s.mi), a: '', val: '' }; });
+  var bars = groups.map(function (g) {
+    var gp = pill(implStatus(g.v, K.t)), w = g.v === null ? 0 : Math.max(1, g.v * 100);
+    return '<button class="bar" ' + (g.a ? 'data-a="' + g.a + '" data-v="' + g.val + '" style="cursor:pointer"' : 'style="cursor:default" tabindex="-1"') + '><span class="bl">' + esc(g.label) + '</span><span class="bt"><span class="bf" style="width:' + w.toFixed(1) + '%;background:' + gp.ac + '"></span><span class="tk" style="left:' + (K.t * 100).toFixed(1) + '%"></span></span><span class="bv">' + pct0(g.v) + '</span></button>';
+  }).join('');
+  var crumbs = '<button class="crumb" data-a="crumbAll">All regions</button>' + (s.region !== 'all' ? '<button class="crumb" data-a="crumbRegion">' + s.region + '</button>' : '') + (s.branch !== 'all' ? '<button class="crumb">' + BRM[s.branch].n + '</button>' : '');
+  var drillTitle = level === 'region' ? 'By region' : level === 'branch' ? 'By branch in ' + s.region : 'By person in ' + BRM[s.branch].n;
+  var right = '<div class="card panel"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><h2 class="h2">' + drillTitle + '</h2><span class="sub">' + (level === 'person' ? '' : 'Click a bar to drill down') + '</span></div>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><nav aria-label="Drill level" style="display:flex;gap:4px">' + crumbs + '</nav><span class="sub" style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:2px;height:12px;background:#2E3440"></span>Target</span></div>' +
+    (bars ? '<div style="display:flex;flex-direction:column;gap:2px;overflow:auto">' + bars + '</div>' : '') + (note ? '<p class="note">' + note + '</p>' : '') + '</div>';
+  // trend
+  var yv = function (val) { return (106 - val * 92).toFixed(1); }, pts = [], dots = '', labels = '';
+  UM.forEach(function (m, i) {
+    var val = implValue(K, brs, s.role, i), x = 75 + 150 * i;
+    if (val !== null) { pts.push(x + ',' + yv(val)); dots += '<circle cx="' + x + '" cy="' + yv(val) + '" r="4.5" fill="#2253B4" stroke="#fff" stroke-width="1.5"/>'; }
+    labels += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:11px;color:' + (i === s.mi ? '#23408B' : '#6B6B6B') + ';font-weight:' + (i === s.mi ? 700 : 400) + '"><span>' + MN[+m.slice(5, 7) - 1] + '</span><span>' + pct0(val) + '</span></div>';
+  });
+  var trend = '<div class="card panel" style="grid-column:2/4;padding:10px 14px;gap:4px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><h2 class="h2">' + K.label + ' by month since launch</h2>' +
+    '<div class="legend"><span><span style="display:inline-block;width:16px;height:3px;background:#2253B4"></span>Value</span><span><span style="display:inline-block;width:16px;border-top:2px dashed #2E3440"></span>Target</span></div></div>' +
+    '<svg viewBox="0 0 900 120" style="display:block;width:100%;height:auto" role="img" aria-label="' + K.label + ' by month"><line x1="0" x2="900" y1="14" y2="14" stroke="#E4E8EF"/><line x1="0" x2="900" y1="60" y2="60" stroke="#E4E8EF"/><line x1="0" x2="900" y1="106" y2="106" stroke="#C9CFD9"/>' +
+    '<text x="2" y="11" font-size="11" fill="#6B6B6B">100%</text><text x="2" y="57" font-size="11" fill="#6B6B6B">50%</text><text x="2" y="103" font-size="11" fill="#6B6B6B">0%</text>' +
+    '<line x1="0" x2="900" y1="' + yv(K.t) + '" y2="' + yv(K.t) + '" stroke="#2E3440" stroke-width="1.5" stroke-dasharray="6 5"/>' +
+    '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#2253B4" stroke-width="3" stroke-linejoin="round"/>' + dots + '</svg><div style="display:flex">' + labels + '</div></div>';
+  var left = '<div class="card panel" style="grid-row:1/3;gap:8px"><div style="display:flex;flex-direction:column;gap:2px"><h2 class="h2">Implementation KPIs</h2><span class="sub">Click a KPI to show it in the gauge and drill-down</span></div><div style="display:flex;flex-direction:column;gap:4px">' + kpis + '</div></div>';
+  return fbar + '<div class="grid">' + left + center + right + trend + '</div>';
+}
+
+function viewImp(s) {
+  var ci = 15 + s.mi, li = ci - 12, A = impAgg(impFilter(s)), lyLabel = fmy(CMON[li]), tyLabel = fmy(CMON[ci]);
+  var o = function (list, all) { return [['all', all]].concat(list.map(function (x) { return [x, x]; })); };
+  var fbar = '<div class="card fbar">' + sel('mi', 'Report month', 126, monthOpts, s.mi) + sel('pRegion', 'Region', 136, o(REGIONS, 'All regions'), s.pRegion) +
+    sel('pTier', 'Current tier', 146, o(TIERS, 'All tiers'), s.pTier) + sel('pType', 'Contractor type', 158, o(TYPES, 'All types'), s.pType) +
+    sel('pSize', 'Size (12-month revenue)', 166, o(SIZES, 'All sizes'), s.pSize) + sel('pProf', 'Profitability status', 146, o(PROFS, 'All statuses'), s.pProf) +
+    '<button class="btn" data-a="clearPortion" style="margin-bottom:0">Clear portion</button></div>';
+  var kpis = IMPACT.map(function (K) {
+    var v = impValue(K.key, A[ci]), ly = impValue(K.key, A[li]), c = impChange(K, v, ly), p = pill(impStatus(K, c)), on = K.key === s.impKpi;
+    return '<button class="kpi' + (on ? ' on' : '') + '" style="height:46px;gap:6px;padding:0 8px" aria-current="' + on + '" data-a="impKpi" data-v="' + K.key + '"><span class="kt"><b>' + K.label + '</b><small style="font-weight:700;color:' + p.fg + '">' + impChangeText(K, c) + '</small></span><span class="kv" style="font-size:14px">' + impFmt(K, v) + '</span>' + pillHtml(p, 60) + '</button>';
+  }).join('');
+  var K = IMPACT.filter(function (k) { return k.key === s.impKpi; })[0];
+  var v = impValue(K.key, A[ci]), ly = impValue(K.key, A[li]), c = impChange(K, v, ly), p = pill(impStatus(K, c));
+  var n = K.key === 'prof' ? A[ci][7] : A[ci][0];
+  var headline = v === null ? 'No sales for this selection' : impFmt(K, v) + ' ' + K.head.replace('{n}', num(n));
+  var tgt = K.unit === 'pts' ? (K.t > 0 ? '+' : '−') + Math.abs(K.t).toFixed(1) + ' pts' : (K.t > 0 ? '+' : '−') + Math.round(Math.abs(K.t) * 100) + '%';
+  var cust = 0; impFilter(s).forEach(function (e) { cust += e.c; });
+  var center = '<div class="card panel" style="padding:12px 16px;gap:8px"><span class="lbl">Selected KPI: ' + K.label + '</span><h2 class="headline">' + esc(headline) + '</h2>' +
+    '<div style="display:flex;align-items:flex-end;gap:24px"><div><div class="sub" style="font-weight:700">' + tyLabel + '</div><div style="font-size:40px;font-weight:700;color:#23408B;line-height:1.05">' + impFmt(K, v) + '</div></div>' +
+    '<div style="padding-bottom:4px"><div class="sub" style="font-weight:700">' + lyLabel + ', last year</div><div style="font-size:22px;font-weight:700;color:#6B6B6B">' + impFmt(K, ly) + '</div></div></div>' +
+    '<div style="font-size:15px;font-weight:700;color:' + p.fg + '">' + impChangeText(K, c) + ' vs ' + lyLabel + '</div>' +
+    '<div style="display:flex;align-items:center;gap:10px">' + pillHtml(p) + '<span style="font-size:12px">Target ' + tgt + ' vs last year · ' + (K.better === 'H' ? 'Higher is better' : 'Lower is better') + '</span></div>' +
+    '<div class="def"><span>' + esc(K.def) + '</span><span class="sub">Portion: ' + num(cust) + ' customers in this portion · ' + big(A[ci][1]) + ' revenue in ' + tyLabel + '</span></div></div>';
+  // breakdown
+  var cats = s.impBy === 'tier' ? TIERS.filter(function (t) { return s.pTier === 'all' || s.pTier === t; }) : REGIONS.filter(function (r) { return s.pRegion === 'all' || s.pRegion === r; });
+  var rows = cats.map(function (cat) { var B = impAgg(impFilter(s, s.impBy === 'tier' ? { t: cat } : { r: cat })); return { label: cat, v: impValue(K.key, B[ci]), ly: impValue(K.key, B[li]) }; });
+  var mx = 0; rows.forEach(function (r) { if (r.v !== null) mx = Math.max(mx, Math.abs(r.v)); if (r.ly !== null) mx = Math.max(mx, Math.abs(r.ly)); });
+  var brk = rows.map(function (r) {
+    var col = pill(impStatus(K, impChange(K, r.v, r.ly))).ac, tw = mx && r.v !== null ? Math.max(1, Math.abs(r.v) / mx * 100) : 0, lw = mx && r.ly !== null ? Math.max(1, Math.abs(r.ly) / mx * 100) : 0;
+    return '<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 62px;align-items:center;gap:10px;padding:5px 0"><span style="font-size:12px;font-weight:700">' + r.label + '</span>' +
+      '<span style="display:flex;flex-direction:column;gap:4px"><span style="display:block;height:14px;border-radius:3px;background:' + col + ';width:' + tw.toFixed(1) + '%"></span><span style="display:block;height:6px;border-radius:3px;background:#C9CFD9;width:' + lw.toFixed(1) + '%"></span></span>' +
+      '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px"><b style="font-size:12px">' + impFmt(K, r.v) + '</b><small style="font-size:11px;color:#6B6B6B">' + impFmt(K, r.ly) + '</small></span></div>';
+  }).join('');
+  var byBtn = function (id, l) { return '<button class="btn' + (s.impBy === id ? ' on' : '') + '" style="height:30px" aria-pressed="' + (s.impBy === id) + '" data-a="impBy" data-v="' + id + '">' + l + '</button>'; };
+  var right = '<div class="card panel"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 class="h2">' + (s.impBy === 'tier' ? 'By current tier' : 'By region') + '</h2><div style="display:flex;gap:6px">' + byBtn('tier', 'By tier') + byBtn('region', 'By region') + '</div></div>' +
+    '<div style="display:flex;flex-direction:column">' + brk + '</div><span class="sub" style="line-height:1.4">Thick bar = report month, colored by status vs target. Thin gray bar = same month last year.</span></div>';
+  // trend
+  var tyv = [], lyv = [];
+  for (var i = 0; i < 12; i++) { lyv.push(impValue(K.key, A[i])); tyv.push(i + 12 < CMON.length ? impValue(K.key, A[i + 12]) : null); }
+  var all = tyv.concat(lyv).filter(function (x) { return x !== null; }), lo = all.length ? Math.min.apply(null, all) : 0, hi = all.length ? Math.max.apply(null, all) : 1;
+  var pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.1 || 1; lo -= pad; hi += pad;
+  var X = function (i) { return (37.5 + 75 * i).toFixed(1); }, Y = function (val) { return (106 - (val - lo) / (hi - lo) * 92).toFixed(1); };
+  var line = function (arr, col, w) { var pp = [], d = ''; arr.forEach(function (val, i) { if (val !== null) { pp.push(X(i) + ',' + Y(val)); d += '<circle cx="' + X(i) + '" cy="' + Y(val) + '" r="3.5" fill="' + col + '"/>'; } }); return '<polyline points="' + pp.join(' ') + '" fill="none" stroke="' + col + '" stroke-width="' + w + '" stroke-linejoin="round"/>' + d; };
+  var tl = MN.map(function (m, i) { return '<div style="flex:1;text-align:center;font-size:11px;color:' + (i === 3 + s.mi ? '#23408B' : '#6B6B6B') + ';font-weight:' + (i === 3 + s.mi ? 700 : 400) + '">' + m + '</div>'; }).join('');
+  var trend = '<div class="card panel" style="grid-column:2/4;padding:10px 14px;gap:4px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><h2 class="h2">' + K.label + ': 2027 vs 2026</h2>' +
+    '<div class="legend"><span><span style="display:inline-block;width:16px;height:3px;background:#23408B"></span>2027</span><span><span style="display:inline-block;width:16px;height:3px;background:#9DB4E3"></span>2026</span><span><span style="display:inline-block;width:2px;height:12px;background:#6B6B6B"></span>Launch, Apr 2027</span></div></div>' +
+    '<svg viewBox="0 0 900 120" style="display:block;width:100%;height:auto" role="img" aria-label="' + K.label + ' 2027 vs 2026"><line x1="0" x2="900" y1="14" y2="14" stroke="#E4E8EF"/><line x1="0" x2="900" y1="60" y2="60" stroke="#E4E8EF"/><line x1="0" x2="900" y1="106" y2="106" stroke="#C9CFD9"/>' +
+    '<text x="2" y="11" font-size="10" fill="#6B6B6B">' + impFmt(K, hi) + '</text><text x="2" y="103" font-size="10" fill="#6B6B6B">' + impFmt(K, lo) + '</text>' +
+    '<line x1="' + X(3) + '" x2="' + X(3) + '" y1="6" y2="106" stroke="#6B6B6B" stroke-width="1.5" stroke-dasharray="4 4"/>' + line(lyv, '#9DB4E3', 2.5) + line(tyv, '#23408B', 3) + '</svg>' +
+    '<div style="display:flex">' + tl + '</div>' + (K.key === 'prof' ? '<span class="sub">Uses each customer’s trailing 12 months, so the 2026 line starts in September.</span>' : '') + '</div>';
+  var left = '<div class="card panel" style="grid-row:1/3;gap:6px"><div style="display:flex;flex-direction:column;gap:2px"><h2 class="h2">Impact KPIs</h2><span class="sub">Change vs the same month last year. Click a KPI.</span></div><div style="display:flex;flex-direction:column;gap:2px">' + kpis + '</div></div>';
+  return fbar + '<div class="grid">' + left + center + right + trend + '</div>';
+}
+
+function viewRef(s) {
+  var cur = CYC.filter(function (c) { return c.s <= ASOF; }).slice(-1)[0], next = CYC.filter(function (c) { return c.s > ASOF; })[0];
+  var selId = s.cycle || cur.id, C = CYM[selId];
+  var curTasks = TASKS.filter(function (t) { return t.c === cur.id; }), tasksOverdue = curTasks.filter(function (t) { return taskStatus(t.due, t.done, cur.p) === 'Overdue'; }).length;
+  var curCh = CHANGES[cur.id] || [], fuOpen = curCh.filter(function (r) { return !r.done; }).length;
+  var cp = pill(cycleStatus(cur));
+  var tiles = '<div class="tiles">' +
+    '<div class="card tile"><span>As of (sample data)</span><b>' + fdy(ASOF) + '</b></div>' +
+    '<div class="card tile"><span>Current cycle</span><b>' + cur.id + ' ' + pillHtml(cp) + '</b></div>' +
+    '<div class="card tile"><span>Next refresh (estimated)</span><b>' + fdw(next.s) + '</b></div>' +
+    '<div class="card tile"><span>Days to next refresh</span><b>in ' + daysBetween(ASOF, next.s) + ' days</b></div>' +
+    '<div class="card tile"><span>Branch tasks overdue, this cycle</span><b style="color:' + (tasksOverdue ? '#B3161D' : '#23408B') + '">' + tasksOverdue + '</b></div>' +
+    '<div class="card tile"><span>Follow-ups open, this cycle</span><b>' + fuOpen + '</b></div></div>';
+  var cycles = CYC.map(function (c) {
+    var st = cycleStatus(c), on = c.id === selId;
+    return '<button class="cyc' + (on ? ' on' : '') + '" aria-current="' + on + '" data-a="cycle" data-v="' + c.id + '"><b>' + c.id + '</b><small>' + fdw(c.s).replace(/^(\w+), /, '$1, ') + '</small><em>' + pillHtml(pill(st)) + (c.ty === 'Launch scoring' ? 'Launch' : c.ds) + '</em></button>';
+  }).join('');
+  var cal = '<div class="card cal"><div style="display:flex;align-items:baseline;gap:12px"><h2 class="h2">Quarterly refresh calendar</h2><span class="sub">Each refresh re-scores every customer on the 12 months before it starts. Click a cycle to see its steps, branch tasks and follow-ups.</span></div>' +
+    '<div class="cycles">' + cycles + '</div><div style="font-size:12px"><b style="color:#23408B">' + C.id + '</b> · ' + C.ty + ' · data ' + fmy(C.ws) + ' to ' + fmy(C.we) + ' · branch task issued ' + fd(C.p) + ' · branch reviews due ' + fd(C.rd) + '</div></div>';
+  var steps = stepsOf(C).map(function (r) {
+    return '<div class="row"><span class="num">' + r.no + '</span><span class="rt"><b>' + r.name + '</b><small>' + r.owner + ' · ' + (r.start === r.end ? fd(r.end) : fd(r.start) + ' – ' + fd(r.end)) + '</small></span>' + pillHtml(pill(stepStatus(r))) + '</div>';
+  }).join('');
+  var colSteps = '<div class="card panel" style="gap:4px"><h2 class="h2">Refresh steps · ' + C.id + '</h2><div>' + steps + '</div></div>';
+  // tasks
+  var tasksHtml = '', brSel = sel('rBranch', 'Branch', 150, [['all', 'All branches']].concat(BR.map(function (b) { return [b.id, b.n]; })), s.rBranch);
+  var hasData = TASKS.some(function (t) { return t.c === selId; });
+  if (C.ty === 'Launch scoring') tasksHtml = '<p class="note">Launch scoring has no tier changes. The branch task list starts with 2027-Q3.</p>';
+  else if (hasData) {
+    tasksHtml = TASKDEF.map(function (td) {
+      var rows = TASKS.filter(function (t) { return t.c === selId && t.no === td[0] && (s.rBranch === 'all' || t.b === s.rBranch); });
+      var sts = rows.map(function (t) { return taskStatus(t.due, t.done, C.p); });
+      var doneN = sts.filter(function (x) { return x === 'Done' || x === 'Done late'; }).length, od = sts.filter(function (x) { return x === 'Overdue'; }).length;
+      var st = s.rBranch !== 'all' ? sts[0] : (doneN === rows.length ? 'Done' : (od ? 'Overdue' : 'Open'));
+      var detail = 'Due ' + fd(rows[0].due) + ' · ' + (s.rBranch === 'all' ? doneN + '/' + rows.length + ' done' + (od ? ' · ' + od + ' overdue' : '') : (rows[0].done ? 'done ' + fd(rows[0].done) : 'not done yet'));
+      return '<div class="row"><span class="rnum">' + td[0] + '</span><span class="rt"><b>' + td[1] + (td[2] !== 'Branch manager' ? ' <span style="font-weight:400;color:#6B6B6B">(' + td[2].toLowerCase() + ')</span>' : '') + '</b><small>' + detail + '</small></span>' + pillHtml(pill(st)) + '</div>';
+    }).join('');
+  } else {
+    tasksHtml = TASKDEF.map(function (td) { var due = addDays(C.s, td[3]); return '<div class="row"><span class="rnum">' + td[0] + '</span><span class="rt"><b>' + td[1] + '</b><small>Due ' + fd(due) + ' · issued ' + fd(C.p) + '</small></span>' + pillHtml(pill('Not issued yet')) + '</div>'; }).join('');
+  }
+  var colTasks = '<div class="card panel" style="gap:4px"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px"><div><h2 class="h2">Branch task list</h2><span class="sub">After the refresh · branch manager owns unless noted</span></div>' + brSel + '</div><div>' + tasksHtml + '</div></div>';
+  // follow-ups
+  var order = { 'Overdue': 0, 'Open': 1, 'Done late': 2, 'Done': 3 };
+  var ch = (CHANGES[selId] || []).filter(function (r) { return s.rBranch === 'all' || r.b === s.rBranch; });
+  var fu = ch.map(function (r) { return { r: r, st: r.done ? (r.done <= r.due ? 'Done' : 'Done late') : (ASOF > r.due ? 'Overdue' : 'Open') }; })
+    .sort(function (a, b) { return (order[a.st] - order[b.st]) || (a.r.due < b.r.due ? -1 : a.r.due > b.r.due ? 1 : a.r.cust - b.r.cust); });
+  var UN = {}; USERS.forEach(function (u) { UN[u.id] = u.n; });
+  var shown = fu.slice(0, 6).map(function (x) {
+    var r = x.r, act = ACT[r.from + '>' + r.to] || 'Follow-up call';
+    return '<div class="fu"><span class="rt"><b>Customer ' + r.cust + ' <span style="font-weight:400">· ' + UN[r.u] + ', ' + BRM[r.b].n + '</span></b><small>' + r.from + ' <b style="color:' + (r.dir === 'Up' ? '#1B6E33' : '#B3161D') + '">' + (r.dir === 'Up' ? '↑' : '↓') + '</b> ' + r.to + ' · ' + act + '</small></span><span class="fr">' + pillHtml(pill(x.st)) + '<small>Due ' + fd(r.due) + '</small></span></div>';
+  }).join('');
+  var cnt = function (f) { return ch.filter(f).length; }, doneN = cnt(function (r) { return r.done; });
+  var fuNote = '';
+  if (C.ty === 'Launch scoring') fuNote = 'No tier changes at launch scoring.';
+  else if (!ch.length && C.s > ASOF) fuNote = 'Customer follow-ups appear when the tier-change report is published (' + fdy(C.p) + ').';
+  else if (!ch.length) fuNote = 'No tier changes for this branch in this cycle.';
+  var summary = ch.length ? ch.length + ' changed tier · ' + cnt(function (r) { return r.dir === 'Up'; }) + ' up · ' + cnt(function (r) { return r.dir === 'Down'; }) + ' down · ' + Math.round(doneN / ch.length * 100) + '% followed up · ' +
+    fu.filter(function (x) { return x.st === 'Overdue'; }).length + ' overdue · ' + Math.round(cnt(function (r) { return r.disp; }) / ch.length * 100) + '% disputed' : '';
+  var colFu = '<div class="card panel" style="gap:6px"><div><h2 class="h2">Customer follow-ups · ' + C.id + '</h2><span class="sub">Customers that changed tier and the recommended contact for their rep · ' + (s.rBranch === 'all' ? 'All branches' : BRM[s.rBranch].n) + '</span></div>' +
+    (summary ? '<div class="summary">' + summary + '</div>' : '') + (shown ? '<div>' + shown + '</div>' : '') + (fuNote ? '<p class="note">' + fuNote + '</p>' : '') +
+    (fu.length > 6 ? '<span class="sub">Showing 6 of ' + fu.length + ', overdue and open first</span>' : '') + '</div>';
+  return tiles + cal + '<div class="cols">' + colSteps + colTasks + colFu + '</div>';
+}
+
+// ---------- render and events ----------
+var board = document.getElementById('board');
+function render() {
+  var pg = page(), body = pg === 'imp' ? viewImp(S) : pg === 'ref' ? viewRef(S) : viewImpl(S);
+  board.innerHTML = headerHtml(pg) + '<main>' + body + '</main>';
+}
+board.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-a]'); if (!el || el.tagName === 'SELECT') return;
+  var a = el.getAttribute('data-a'), v = el.getAttribute('data-v');
+  if (a === 'role') S.role = v;
+  else if (a === 'implKpi') S.implKpi = v;
+  else if (a === 'drillRegion') { S.region = v; S.branch = 'all'; }
+  else if (a === 'drillBranch') { S.branch = v; S.region = BRM[v].g; }
+  else if (a === 'crumbAll') { S.region = 'all'; S.branch = 'all'; }
+  else if (a === 'crumbRegion') S.branch = 'all';
+  else if (a === 'impKpi') S.impKpi = v;
+  else if (a === 'impBy') S.impBy = v;
+  else if (a === 'clearPortion') { S.pRegion = S.pTier = S.pType = S.pSize = S.pProf = 'all'; }
+  else if (a === 'cycle') S.cycle = v;
+  else return;
+  render();
+});
+board.addEventListener('change', function (e) {
+  var el = e.target; if (el.tagName !== 'SELECT') return;
+  var a = el.getAttribute('data-a'), v = el.value;
+  if (a === 'mi') S.mi = +v;
+  else if (a === 'region') { S.region = v; S.branch = 'all'; }
+  else if (a === 'branch') { S.branch = v; if (v !== 'all') S.region = BRM[v].g; }
+  else S[a] = v;
+  render();
+});
+window.addEventListener('hashchange', render);
+function fit() {
+  var s = Math.min(1, (window.innerWidth - 24) / 1280), sc = document.getElementById('scaler');
+  sc.style.transform = 'scale(' + s + ')';
+  document.getElementById('stage').style.height = (720 * s + 20) + 'px';
+}
+window.addEventListener('resize', fit);
+fit(); render();
+})();
+</script>
+</body>
+</html>
